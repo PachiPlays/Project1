@@ -4,10 +4,16 @@ class Program
 {
     static void Main(string[] args)
     {
+        
+
         Console.WriteLine("Hello Prep2 World!");
         Console.WriteLine("What is your grade percentage? ");
+
+        try
+        {
         int grade = int.Parse(Console.ReadLine());
 
+        
         string letter = "";
 
         if (grade >= 90 )
@@ -42,5 +48,19 @@ class Program
         {
             Console.WriteLine("You failed the class!");
         }
+
+        
+        }
+
+        
+
+
+
+
+        catch (Exception e)
+        {
+            Console.WriteLine("That's not a number!");
+        }
+
     }
 }
