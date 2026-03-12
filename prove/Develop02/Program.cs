@@ -2,12 +2,15 @@ using System;
 
 class Program
 {
+    
     static void Main(string[] args)
     {
         
         int userInput = -1;
+        string fileName = "";
 
         Journal journal1 = new Journal();
+        Entry entry1 = new Entry();
         
         Console.WriteLine("What is your name? ");
         journal1._nameOfUser = Console.ReadLine();
@@ -16,9 +19,9 @@ class Program
 
             Console.WriteLine("Welcome to the journal!");
 
-            if (journal1._fileName != "")
+            if (fileName != "")
             {
-                Console.WriteLine($"You are currently in the journal called {journal1._fileName}!");
+                Console.WriteLine($"You are currently in the journal called {fileName}!");
             }
             else
             {
@@ -33,6 +36,7 @@ class Program
 
             userInput = int.Parse(Console.ReadLine());
 
+            try{
             switch(userInput)
             {
             case 0:
@@ -42,36 +46,41 @@ class Program
 
             case 1:
             
-            journal1.DisplayPrompt();
-            journal1.NewEntry();
+            entry1.DisplayPrompt();
+            entry1.NewEntry();
             break;
 
             case 2:
 
-            journal1.ReadFile();
+            journal1.ReadFile(ref fileName);
 
 
             break;
             
             case 3:
             
-            journal1.SaveFile();
+            entry1.SaveFile(journal1._nameOfUser, ref fileName);
 
 
             break;
 
             case 4:
-
-            journal1.LoadNewJournal();
+            journal1.LoadNewJournal(ref fileName);
+            
             break;
 
             default:
             Console.WriteLine("That's not an option!");
 
             break;
-
-
+            }
+            
         }
+        catch (SystemException)
+            {
+                Console.WriteLine("That's not a valid entry!");
+            }
+
         }
     }
 }
