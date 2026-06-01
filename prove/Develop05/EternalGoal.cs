@@ -1,4 +1,3 @@
-using System.Drawing;
 
 public class EternalGoal : Goal
 {
