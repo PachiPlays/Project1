@@ -1,57 +1,87 @@
-using System.ComponentModel;
-using System.IO;
-using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
-
 public class Journal
 {
-    public string _nameOfUser = "";
+    private string _userName = "No Username yet";
+    private string _fileName = "File not yet saved!!";
+
+
     
+    List<Entry> entries = new List<Entry>();
 
-
-
-
-    public void ReadFile(ref string fileName)
+    public void AddEntry(Entry entry)
     {
-        try
+        entries.Add(entry);
+    }
+
+    public void DisplayEntries()
+    {
+        Console.WriteLine($"You are in {_fileName} and these entries were written by {_userName}");
+
+        foreach (Entry e in entries)
         {
-            
-        
-        
-        Console.WriteLine("Reading file...");
-        
-        string[] lines = System.IO.File.ReadAllLines(fileName);
-
-        foreach (string line in lines)
-        {
-        Console.WriteLine(line);   
+            string entryString = e.GetEntryString();
+            Console.WriteLine(entryString);
+            Console.WriteLine();
         }
-        Console.WriteLine("\n");
-
-        }
-
-        catch (SystemException)
-        {
-            Console.WriteLine("You need to load a file to do that first!\n");
-        }
-
-        
-        
-
-        
+    }
     
+    public void SaveJournal()
+    {
+        Console.WriteLine("What should the file be called?");
+        _fileName = Console.ReadLine();
+        Console.WriteLine("What is your name?");
+        _userName = Console.ReadLine();
+        //put name on the first line
+        List<string> csvLines = [$"{_userName},"];
+        
+        
+        foreach (Entry e in entries)
+        {
+            string entryString = e.GetEntryInfoForCSV();
+            csvLines.Add(entryString);
+
+        }
+
+        File.WriteAllLines(_fileName, csvLines);
+
+    }
+
+    public void ReadFile()
+    {   
+        entries.Clear();
+
+        string[] lines = File.ReadAllLines(_fileName);
+        //get name from the first line
+        _userName = lines[0];
+
+        //make it so that it skips the first line
+        for(int i = 1; i < lines.Length; i++)
+        {
+            string line = lines[i];
+            
+
+            string[] splitLines = line.Split(",");
+            
+
+            string dateOfEntry = splitLines[1].Replace("\"\"","").Trim('"');
+            string userEntry = splitLines[2].Replace("\"\"","").Trim('"');
+            string promptUsed = splitLines[0].Replace("\"\"","").Trim('"');
+
+
+            Entry entry = new Entry(dateOfEntry, userEntry, promptUsed);
+            entries.Add(entry);
+
+        }
 
     }
     
-    public void LoadNewJournal(ref string fileName)
+    public void LoadNewJournal()
     {
-        Console.WriteLine("Enter the name of the file that you want to load");
-        //_fileName = $@"C:\Users\willb\CSE210\Project1\prove\Develop02\{Console.ReadLine()}";
-        fileName = Console.ReadLine();
-        Console.WriteLine("Loading file... ");
-        Console.WriteLine("File loaded!");
-        Console.WriteLine("\n");
+        Console.WriteLine("What is the name of your saved file?");
+        _fileName = Console.ReadLine();
 
+        ReadFile();
+
+        Console.WriteLine("File loaded!");
     }
 
 }

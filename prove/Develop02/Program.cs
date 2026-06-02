@@ -1,86 +1,67 @@
 using System;
+using System.Diagnostics;
 
 class Program
 {
-    
     static void Main(string[] args)
     {
+        Console.WriteLine("Hello Develop2 World!");
+
+        int x = -1;
         
-        int userInput = -1;
-        string fileName = "";
 
-        Journal journal1 = new Journal();
-        Entry entry1 = new Entry();
-        
-        Console.WriteLine("What is your name? ");
-        journal1._nameOfUser = Console.ReadLine();
-
-        while (userInput != 0){
-
-            Console.WriteLine("Welcome to the journal!");
-
-            if (fileName != "")
-            {
-                Console.WriteLine($"You are currently in the journal called {fileName}!");
-            }
-            else
-            {
-                Console.WriteLine("You do not currently have a journal file loaded");
-            }
-            
-            Console.WriteLine("Type 1 to add a new entry to the journal");
-            Console.WriteLine("Type 2 to read all entries from the journal");
-            Console.WriteLine("Type 3 to save the journal in its current state");
-            Console.WriteLine("Type 4 to load a different journal file");
-            Console.WriteLine("Type 0 to quit");
-
-            userInput = int.Parse(Console.ReadLine());
-
-            try{
-            switch(userInput)
-            {
-            case 0:
-
-            Console.WriteLine("Thank you!");
-            break;
-
-            case 1:
-            
-            entry1.DisplayPrompt();
-            entry1.NewEntry();
-            break;
-
-            case 2:
-
-            journal1.ReadFile(ref fileName);
+        Journal J = new Journal();
 
 
-            break;
-            
-            case 3:
-            
-            entry1.SaveFile(journal1._nameOfUser, ref fileName);
+        while(x != 5)
+        {
+        DateTime dateTime = DateTime.Now;
+        string date = dateTime.ToString();
 
+        Console.WriteLine("Please choose one of the following:");
+        Console.WriteLine("1. Write");
+        Console.WriteLine("2. Display");
+        Console.WriteLine("3. Save");
+        Console.WriteLine("4. Load");
+        Console.WriteLine("5. Quit");
 
-            break;
+        x = int.Parse(Console.ReadLine());
+        switch (x)
+        {
+        case 1:
+        Entry E = new Entry(date);
+        string promptUsed = E.GetRandomPrompt();
+        Console.WriteLine(promptUsed);
+        string userEntry = Console.ReadLine();
+        E.SaveEntry(userEntry, promptUsed);
+        J.AddEntry(E);
+        break;
 
-            case 4:
-            journal1.LoadNewJournal(ref fileName);
-            
-            break;
+        case 2:
+        J.DisplayEntries();
+        break;
 
-            default:
-            Console.WriteLine("That's not an option!");
+        case 3:
+        J.SaveJournal();
+        break;
 
-            break;
-            }
-            
+        case 4:
+        J.LoadNewJournal();
+        break;
+
+        case 5:
+        x = 5;
+        break;
+
+        default:
+        Console.WriteLine("Sorry, that doesn't look like a valid entry. Please try again!");
+        break;
         }
-        catch (SystemException)
-            {
-                Console.WriteLine("That's not a valid entry!");
-            }
 
         }
+
+        Console.WriteLine("Thanks for using the journal! Have a great day!");
+
+
     }
 }
