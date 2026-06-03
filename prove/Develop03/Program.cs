@@ -11,9 +11,15 @@ class Program
         Reference R2 = new Reference("Proverbs", 3, 5, 6);
         Scripture S2 = new Scripture("Trust in the LORD with all thine heart; and lean not unto thine own understanding. In all thy ways acknowledge him, and he shall direct thy paths.", R2);
 
-        List<Scripture> scriptures = new List<Scripture>{S1, S2};
+        Reference R3 = new Reference("1 Nephi", 3, 7);
+        Scripture S3 = new Scripture("And it came to pass that I, Nephi, said unto my father: I will go and do the things which the Lord hath commanded, for I know that the Lord giveth no commandments unto the children of men, save he shall prepare a way for them that they may accomplish the thing which he commandeth them.", R3);
 
-        int x = Random.Shared.Next(0, 2);   
+        Reference R4 = new Reference("Alma", 7, 11);
+        Scripture S4 = new Scripture("And he shall go forth, suffering pains and afflictions and temptations of every kind; and this that the word might be fulfilled which saith he will take upon him the pains and the sicknesses of his people.", R4);
+
+        List<Scripture> scriptures = new List<Scripture>{S1, S2, S3, S4};
+
+        int x = Random.Shared.Next(0, 4);   
         Scripture SX = scriptures[x];     
 
         Console.Clear();
