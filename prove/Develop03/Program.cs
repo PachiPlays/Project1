@@ -1,73 +1,47 @@
-using System;
-using System.Runtime.InteropServices.Marshalling;
-using System.Security.Cryptography;
-using System.Security.Cryptography.X509Certificates;
-
 class Program
 {
     static async Task Main(string[] args)
     {
         Console.WriteLine("Hello Develop03 World!");
-        string ans = "";
-        int x = 5;
-        bool isDone;
+        string userInput;
 
+        Reference R1 = new Reference("John", 3, 16);
+        Scripture S1 = new Scripture("For God so loved the world, that he gave his only begotten Son, that whosoever believeth in him should not perish, but have everlasting life", R1);
 
-        string scripToAdd = "For God so loved the world, that He gave His only begotten Son, that whosoever believeth in him should not perish, but have everlasting life";
-        string scripToAdd2 = "And Paul, as his manner was, went in unto them, and three sabbath days reasoned with them out of the scriptures, Opening and alleging, that Christ must needs have suffered, and risen again from the dead; and that this Jesus, whom I preach unto you, is Christ.";
+        Reference R2 = new Reference("Proverbs", 3, 5, 6);
+        Scripture S2 = new Scripture("Trust in the LORD with all thine heart; and lean not unto thine own understanding. In all thy ways acknowledge him, and he shall direct thy paths.", R2);
 
-        Scripture s1 = new Scripture(scripToAdd);
-        Scripture s2 = new Scripture(scripToAdd2);
-        Reference r1 = new Reference("John", 3, 16);
-        Reference r2 = new Reference("Acts", 17, "2-3");
-        
-        string originalScripture1 = s1.GetScripture();
-        
-        string ref1 = r1.GetReference();
-        string ref2 = r2.GetReference();
-        s1.SplitScripture();
-        s2.SplitScripture();
+        List<Scripture> scriptures = new List<Scripture>{S1, S2};
 
-        
-        
-        Console.WriteLine("Hit enter to start, or type quit to quit");
-        ans = Console.ReadLine();
+        int x = Random.Shared.Next(0, 2);   
+        Scripture SX = scriptures[x];     
 
-
-        if(ans != "quit")
-        {
-            
-        do
-        {
-            
-            if(x == 5)
-            {
-                Console.Clear();
-                Console.WriteLine($"{originalScripture1}: {ref1}");
-            }
-            ans = Console.ReadLine();
-            Console.Clear();
-            string scrip1 = s1.HideWords(x, out isDone);
-            x--;
-            string t1 = $"{scrip1}: {ref1}";
-            Console.WriteLine(t1);
-            
-            
-
-        }while(ans != "quit" && isDone != true);
-        
-        }
-        else
-        {
-            Console.WriteLine("Program quit by user");
-            return;
-        }
-
-        Console.ReadLine();
         Console.Clear();
-        string tO = $"{originalScripture1}: {ref1}";
-        Console.WriteLine(tO);
+        SX.DisplayScripture();
+        Console.WriteLine("Press enter to continue or type 'quit' to finish");
+        userInput = Console.ReadLine();
 
+        while(userInput != "quit")
+        {
+            Console.Clear();
+            SX.DisplayScriptureWithHiddenWords();
+            Console.WriteLine("Press enter to continue or type 'quit' to finish");
+            int z = SX.GetNumberOfHiddenWords();
+            if (z == 0)
+            {
+                break;
+            }
+            userInput = Console.ReadLine();
+            if (userInput == "quit")
+            {
+                break;
+            }
+
+
+
+        }
+
+        
 
         
 

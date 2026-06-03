@@ -1,110 +1,74 @@
-using System.Runtime.CompilerServices;
-using System.Runtime.Intrinsics.Arm;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-
 
 class Scripture
 {
     
     private string _scripture;
-
-    public Scripture(string scripture)
-    {
-        _scripture = scripture;
-    }
+    private Reference _reference;
 
     List<Word> words = new List<Word>();
+
+    public Scripture(string scripture, Reference reference)
+    {
+        _scripture = scripture;
+        _reference = reference;
+
+        string[] splitScripture = _scripture.Split(" ");
+
+        foreach(string word in splitScripture)
+        {
+            Word W = new Word(word);
+            words.Add(W);
+        }
     
-    public void SetScripture(string scrip)
-    {
-        _scripture = scrip;
-    }
-    public string GetScripture()
-    {
-        string scrip = _scripture;
-        return scrip;
     }
 
-
-    /*public string GetHiddenScripture(int numToHide)
+    public void DisplayScripture()
     {
-        Word w = new Word();
-        List<string> list = w.GetList(_scripture);
-        string hiddenScripture = w.HideWord(list, numToHide);
-
-        return hiddenScripture;
-    }*/
-
-    public void SplitScripture()
-    {
-        
-        StringBuilder sb = new StringBuilder();
-        
-        string [] split = _scripture.Split(new char[] {}, StringSplitOptions.RemoveEmptyEntries);
-        foreach(string s in split)
+        Console.WriteLine(_reference.GetRefAsString());
+        _scripture = "";
+        foreach(Word word in words)
         {
-            Word w = new Word();
-            w.SetWord(s);
-            w.SetIsHidden(false);
-            words.Add(w);
+            _scripture += word.GetWordText();
+            _scripture += " ";
         }
-
-        /*foreach(Word w in words)
-        {
-            string w1 = w.GetWord();
-            sb.Append(w1);
-            sb.Append(' ');
-        }
-        string finalString = sb.ToString();*/
-        
+        Console.WriteLine(_scripture);
     }
 
-    public string HideWords(int num, out bool isDone)
+    public void DisplayScriptureWithHiddenWords()
+    {   
+        int x = 1;
+        
+        for(int i = 1; i < 5; i++)
+        {
+            int y = Random.Shared.Next(words.Count());
+            if(words[y].GetIsHidden() != true)
+            {
+               words[y].HideWord(); 
+            }
+            else
+            {
+                i -= 1;
+
+                x += 1;
+                if(x == words.Count() * 3)
+                {
+                    break;
+                }
+            }
+        }
+        DisplayScripture();
+    }
+
+    public int GetNumberOfHiddenWords()
     {
-        int y = num;
         int x = 0;
-
-        StringBuilder sb = new StringBuilder();
-        foreach(Word w in words)
+        foreach (Word word in words)
         {
-            if(y == 5)
+            if (word.GetIsHidden() != true)
             {
-                w.SetIsHidden(true);
-                y = 0;
+                x += 1;
             }
-
-            string w1 = w.GetWord();
-            sb.Append(w1);
-            sb.Append(' ');
-            y++;
-            
-            bool isHidden = w.GetIsHidden();
-            if(isHidden == false)
-            {
-                x++;
-                isDone = false;
-            }
-            
         }
-
-        if(x == 0)
-        {
-            isDone = true;
-        }
-        else
-        {
-            isDone = false;
-        }
-
-        string finalString = sb.ToString();
-        return finalString;
-
-
+        return x;
     }
-    
-    
-
-    
-
 }
