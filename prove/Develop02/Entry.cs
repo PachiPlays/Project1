@@ -1,109 +1,51 @@
 public class Entry{
-
     
-    List<string> _journalEntries = new List<string>();
+    private string _dateOfEntry;
+    private string _userEntry;
+    private string _promptUsed;
 
-    public string _userEntry = "";
-    DateTime dateTime = DateTime.Now;
+    List<string> prompts = [
+    "What was the best part of your day?", 
+    "Who do you wish you'd been able to see today?",
+    "How did you feel guided by the Lord today?",
+    "What is something you wish you could have changed about today?",
+    "What are you looking forward to tomorrow?",
+    "What are some goals that you would like to set after today?"
+    ];
 
+    public Entry(string dateOfEntry)
+    {
+        _dateOfEntry = dateOfEntry;
+    }
+
+    public Entry(string dateOfEntry, string userEntry, string promptUsed)
+    {
+        _dateOfEntry = dateOfEntry;
+        _userEntry = userEntry;
+        _promptUsed = promptUsed;
+    }
+
+    public string GetRandomPrompt()
+    {
+        int i = Random.Shared.Next(prompts.Count());
+        return prompts[i];
+    }
     
-    Prompt promptGenerator = new Prompt();
-
-
-public void NewEntry()
+    public string GetEntryString()
     {
-        _journalEntries.Add($"Prompt: {promptGenerator._listOfPrompts[promptGenerator.x]}\n");
-        
-        do
-        {   
-
-            _userEntry = Console.ReadLine();
-
-            if (_userEntry != "")
-            {   
-                
-                _journalEntries.Add(_userEntry);
-            }
-            else
-            {
-                Console.WriteLine("Thank you for writing today!");
-            }
-                
-
-
-        } while (_userEntry != "");
-
-        
-
-
+        return $"Prompt: {_promptUsed} on {_dateOfEntry} - {_userEntry}";
     }
 
-    public void DisplayPrompt()
+    public void SaveEntry(string userEntry, string promptUsed)
     {
-        
-    Console.WriteLine("Here is your prompt!");
-    Console.WriteLine("To finish your entry, enter an empty line!\n");
-    promptGenerator.GeneratePrompt();
-
+        _userEntry = userEntry;
+        _promptUsed = promptUsed;
     }
 
-    public void SaveFile(string userName, ref string _fileName)
+    public string GetEntryInfoForCSV()
     {
-        
-        
-
-        
-            
-        
-
-        try
-        {
-
-        if (_journalEntries.Count() == 0)
-        {
-            throw new InvalidOperationException("No current entries");
-        }
-
-
-        if (_fileName == "")
-        {
-            Console.WriteLine("Enter a name for your file");
-            //_fileName = $@"C:\Users\willb\CSE210\Project1\prove\Develop02\{Console.ReadLine()}";
-            _fileName = Console.ReadLine();
-
-        }    
-        Console.WriteLine("Saving file...");
-
-        using (StreamWriter outputFile = new StreamWriter(_fileName, append: true))
-            {   
-                
-
-                foreach (string line in _journalEntries)
-                {
-                    outputFile.WriteLine(line);
-                }
-
-                outputFile.WriteLine($"This was written on: {dateTime} by {userName}\n");
-            }
-
-        _journalEntries.Clear();
-        //clear the current entries so that it doesn't duplicate them
-
-        }
-
-            catch (InvalidOperationException)
-        {
-            
-            Console.WriteLine("No current entries");
-        }
-        
-            catch (SystemException)
-        {
-            Console.WriteLine("You need a name for your file! Try again!");
-            
-        }
-        
+        string entry = $"\"{_promptUsed}\",\"{_dateOfEntry}\",\"{_userEntry}\"";
+        string fixedEntry = entry.Replace("\"", "\"\"");
+        return fixedEntry;
     }
-
-       
 }
